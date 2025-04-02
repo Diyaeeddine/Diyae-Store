@@ -9,7 +9,7 @@ export const syncUserCreation = inngest.createFunction(
   {
     id: "sync-user-from-clerk",
   },
-  { event: "clerk/user.created" }, // ✅ Fixed event key
+  { event: "clerk/user.created" },
   async ({ event }) => {
     const { id, first_name, last_name, email_addresses, image_url } =
       event.data;
@@ -20,7 +20,7 @@ export const syncUserCreation = inngest.createFunction(
       imageUrl: image_url,
     };
     await connectDB();
-    await User.create(userData); // ✅ Fixed Clerk model usage
+    await User.create(userData); 
   }
 );
 
@@ -29,7 +29,7 @@ export const syncUserUpdation = inngest.createFunction(
   {
     id: "update-user-from-clerk",
   },
-  { event: "clerk/user.updated" }, // ✅ Fixed event key
+  { event: "clerk/user.updated" }, 
   async ({ event }) => {
     const { id, first_name, last_name, email_addresses, image_url } =
       event.data;
@@ -48,10 +48,10 @@ export const syncUserDeletion = inngest.createFunction(
   {
     id: "delete-user-from-clerk",
   },
-  { event: "clerk/user.deleted" }, // ✅ Fixed event key
+  { event: "clerk/user.deleted" }, 
   async ({ event }) => {
     const { id } = event.data;
     await connectDB();
-    await User.findByIdAndDelete(id); // ✅ Fixed function name
+    await User.findByIdAndDelete(id); 
   }
 );
