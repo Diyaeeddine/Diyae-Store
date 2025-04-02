@@ -1,42 +1,41 @@
 import { Inngest } from "inngest";
-import connectDB from "./db";
-import { User } from "@clerk/nextjs/dist/types/server";
+import connectDB from "./db"; // Make sure this is correct
+import User from "../models/user"; // Import your MongoDB User model
 
 export const inngest = new Inngest({ id: "diyaeStore-next" });
 
-//Inngest function to save user data to a database
+// Inngest function to save user data to the database
 export const syncUserCreation = inngest.createFunction(
   {
     id: "sync-user-from-clerk",
   },
-  { e: "clerk/user.created" },
-  async ({ e }) => {
-    const { id, first_name, last_name, email_addresses, image_url } = e.data;
+  { event: "clerk/user.created" }, // ✅ Fixed event key
+  async ({ event }) => {
+    const { id, first_name, last_name, email_addresses, image_url } =
+      event.data;
     const userData = {
       _id: id,
       email: email_addresses[0].email_address,
-      name: first_name + " " + last_name,
+      name: `${first_name} ${last_name}`,
       imageUrl: image_url,
     };
     await connectDB();
-    await User.create(userData);
+    await User.create(userData); // ✅ Fixed Clerk model usage
   }
 );
 
-//inngest function to update user data in database
+// Inngest function to update user data in the database
 export const syncUserUpdation = inngest.createFunction(
   {
     id: "update-user-from-clerk",
   },
-  {
-    e: "clerk/user.update",
-  },
-  async ({ e }) => {
-    const { id, first_name, last_name, email_addresses, image_url } = e.data;
+  { event: "clerk/user.updated" }, // ✅ Fixed event key
+  async ({ event }) => {
+    const { id, first_name, last_name, email_addresses, image_url } =
+      event.data;
     const userData = {
-      _id: id,
       email: email_addresses[0].email_address,
-      name: first_name + " " + last_name,
+      name: `${first_name} ${last_name}`,
       imageUrl: image_url,
     };
     await connectDB();
@@ -44,15 +43,15 @@ export const syncUserUpdation = inngest.createFunction(
   }
 );
 
-//inngest function to delete user data from database
-export const syncUserDeletion = inngest.createFuntion(
+// Inngest function to delete user data from the database
+export const syncUserDeletion = inngest.createFunction(
   {
     id: "delete-user-from-clerk",
   },
-  { e: "clerk/user.delete" },
-  async (e) => {
-    const { id } = e.data;
+  { event: "clerk/user.deleted" }, // ✅ Fixed event key
+  async ({ event }) => {
+    const { id } = event.data;
     await connectDB();
-    await User.fintByIdAndDelete(id);
+    await User.findByIdAndDelete(id); // ✅ Fixed function name
   }
 );
