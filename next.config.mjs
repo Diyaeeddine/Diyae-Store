@@ -1,5 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+    
+  experimental: {
+    serverActions: true, // Required for Clerk v4+
+  },
     images: {
         remotePatterns: [
             {
