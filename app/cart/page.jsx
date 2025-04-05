@@ -17,9 +17,11 @@ const Cart = () => {
         <div className="flex-1">
           <div className="flex items-center justify-between mb-8 border-b border-gray-500/30 pb-6">
             <p className="text-2xl md:text-3xl text-gray-500">
-              Your <span className="font-medium text-orange-600">Cart</span>
+              Your <span className="font-medium text-[#ffb929]">Cart</span>
             </p>
-            <p className="text-lg md:text-xl text-gray-500/80">{getCartCount()} Items</p>
+            <p className="text-lg md:text-xl text-gray-500/80">
+              {getCartCount()} Items
+            </p>
           </div>
           <div className="overflow-x-auto">
             <table className="min-w-full table-auto">
@@ -41,7 +43,9 @@ const Cart = () => {
               </thead>
               <tbody>
                 {Object.keys(cartItems).map((itemId) => {
-                  const product = products.find(product => product._id === itemId);
+                  const product = products.find(
+                    (product) => product._id === itemId
+                  );
 
                   if (!product || cartItems[itemId] <= 0) return null;
 
@@ -59,7 +63,7 @@ const Cart = () => {
                             />
                           </div>
                           <button
-                            className="md:hidden text-xs text-orange-600 mt-1"
+                            className="md:hidden text-xs text-[#ffb929] mt-1"
                             onClick={() => updateCartQuantity(product._id, 0)}
                           >
                             Remove
@@ -68,24 +72,43 @@ const Cart = () => {
                         <div className="text-sm hidden md:block">
                           <p className="text-gray-800">{product.name}</p>
                           <button
-                            className="text-xs text-orange-600 mt-1"
+                            className="text-xs text-[#ffb929] mt-1"
                             onClick={() => updateCartQuantity(product._id, 0)}
                           >
                             Remove
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${product.offerPrice}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">
+                        ${product.offerPrice}
+                      </td>
                       <td className="py-4 md:px-4 px-1">
                         <div className="flex items-center md:gap-2 gap-1">
-                          <button onClick={() => updateCartQuantity(product._id, cartItems[itemId] - 1)}>
+                          <button
+                            onClick={() =>
+                              updateCartQuantity(
+                                product._id,
+                                cartItems[itemId] - 1
+                              )
+                            }
+                          >
                             <Image
                               src={assets.decrease_arrow}
                               alt="decrease_arrow"
                               className="w-4 h-4"
                             />
                           </button>
-                          <input onChange={e => updateCartQuantity(product._id, Number(e.target.value))} type="number" value={cartItems[itemId]} className="w-8 border text-center appearance-none"></input>
+                          <input
+                            onChange={(e) =>
+                              updateCartQuantity(
+                                product._id,
+                                Number(e.target.value)
+                              )
+                            }
+                            type="number"
+                            value={cartItems[itemId]}
+                            className="w-8 border text-center appearance-none"
+                          ></input>
                           <button onClick={() => addToCart(product._id)}>
                             <Image
                               src={assets.increase_arrow}
@@ -95,18 +118,23 @@ const Cart = () => {
                           </button>
                         </div>
                       </td>
-                      <td className="py-4 md:px-4 px-1 text-gray-600">${(product.offerPrice * cartItems[itemId]).toFixed(2)}</td>
+                      <td className="py-4 md:px-4 px-1 text-gray-600">
+                        ${(product.offerPrice * cartItems[itemId]).toFixed(2)}
+                      </td>
                     </tr>
                   );
                 })}
               </tbody>
             </table>
           </div>
-          <button onClick={()=> router.push('/all-products')} className="group flex items-center mt-6 gap-2 text-orange-600">
+          <button
+            onClick={() => router.push("/all-products")}
+            className="group flex items-center mt-6 gap-2 text-[#ffb929]"
+          >
             <Image
-              className="group-hover:-translate-x-1 transition"
+              className="w-6 h-6 group-hover:-translate-x-1 transition"
               src={assets.arrow_right_icon_colored}
-              alt="arrow_right_icon_colored"
+              alt="Left arrow icon"
             />
             Continue Shopping
           </button>

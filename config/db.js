@@ -17,7 +17,7 @@ async function connectDB() {
     };
 
     cached.promise = mongoose
-      .connect(process.env.MONGODB_URI, opts) // Removed the `/nextjs-cluster` part
+      .connect(process.env.MONGODB_URI, opts)
       .then((mongoose) => mongoose)
       .catch((error) => {
         console.error("MongoDB Connection Error:", error);
