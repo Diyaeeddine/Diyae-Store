@@ -7,8 +7,8 @@ import { ClerkProvider } from "@clerk/nextjs";
 const poppins = Poppins({ subsets: ["latin"], weight: ["300", "400", "500"] });
 
 export const metadata = {
-  title: "QuickCart - GreatStack",
-  description: "E-Commerce with Next.js",
+  title: "Diyae-Store",
+  description: "Welcome to my Store",
 };
 
 export default function RootLayout({ children }) {

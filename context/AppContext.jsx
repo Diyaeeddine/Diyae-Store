@@ -64,9 +64,20 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = 1;
     }
     setCartItems(cartData);
-    toast.success("Item added to cart");
     if (user) {
-      
+      try {
+        //axios kansta3mloh bash nla9iw bin api w body. api fih method soi get wlla post.. kanjiboha bash t3tilna result flbody
+        // Axios kansta3mlouh باش nwaslou bin frontend w backend. API fih methods b7al GET w POST, w Axios katkhdem 3la request w katkhdem response li kayji mn API, kathto lina f body.
+        const token = await getToken();
+        await axios.post(
+          "/api/cart/update",
+          { cartData },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast.success("Item added to cart");
+      } catch (error) {
+        toast.error({ success: false, message: message.error });
+      }
     }
   };
 
@@ -78,7 +89,21 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = quantity;
     }
     setCartItems(cartData);
-
+    if (user) {
+      try {
+        //axios kansta3mloh bash nla9iw bin api w body. api fih method soi get wlla post.. kanjiboha bash t3tilna result flbody
+        // Axios kansta3mlouh باش nwaslou bin frontend w backend. API fih methods b7al GET w POST, w Axios katkhdem 3la request w katkhdem response li kayji mn API, kathto lina f body.
+        const token = await getToken();
+        await axios.post(
+          "/api/cart/update",
+          { cartData },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        toast.success("Cart updated");
+      } catch (error) {
+        toast.error({ success: false, message: message.error });
+      }
+    }
   };
 
   const getCartCount = () => {
