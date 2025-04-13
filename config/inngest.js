@@ -1,6 +1,7 @@
 import { Inngest } from "inngest";
 import connectDB from "./db"; // Make sure this is correct
 import User from "../models/user"; // Import your MongoDB User model
+import Order from "@/models/order";
 
 export const inngest = new Inngest({ id: "diyaeStore-next" });
 
@@ -20,7 +21,7 @@ export const syncUserCreation = inngest.createFunction(
       imageUrl: image_url,
     };
     await connectDB();
-    await User.create(userData); 
+    await User.create(userData);
   }
 );
 
@@ -29,7 +30,7 @@ export const syncUserUpdation = inngest.createFunction(
   {
     id: "update-user-from-clerk",
   },
-  { event: "clerk/user.updated" }, 
+  { event: "clerk/user.updated" },
   async ({ event }) => {
     const { id, first_name, last_name, email_addresses, image_url } =
       event.data;
@@ -48,10 +49,33 @@ export const syncUserDeletion = inngest.createFunction(
   {
     id: "delete-user-from-clerk",
   },
-  { event: "clerk/user.deleted" }, 
+  { event: "clerk/user.deleted" },
   async ({ event }) => {
     const { id } = event.data;
     await connectDB();
-    await User.findByIdAndDelete(id); 
+    await User.findByIdAndDelete(id);
+  }
+);
+
+//Inngest function to create user's order in the database
+export const creatUserOrder = inngest.createFunction(
+  {
+    id: "create-user-order",
+    batchEvents: { maxSize: 25, timeout: "5s" },
+  },
+  { event: "order/created" },
+  async ({ events }) => {
+    const orders = events.map((event) => {
+      return {
+        userId: event.data.userId,
+        items: event.data.items,
+        amount: event.data.amount,
+        address: event.data.address,
+        date: event.data.date,
+      };
+    });
+    await connectDB();
+    await Order.insertMany(orders);
+    return { success: true, processed: orders.length };
   }
 );
